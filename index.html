@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Contactx</title>
+    <link rel='stylesheet' href='./stylesheets/styles.css'>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src='./javascripts/handlebars-v4.0.10.js'></script>
+  </head>
+  <body>
+    <header>
+      <h1>Contactx</h1>
+      <p>A small contacts manager, using local storage</p>
+    </header>
+    <main>
+      <div id='main-view'>
+        <div id='app-functions'>
+          <div id='add-button'>
+            <a href='#' id='addNew'>Add Contact</a>
+          </div>
+          <div id='search-bar'>
+            <input type=text id='search' placeholder="search">
+          </div>
+        </div>
+
+        <div id='contacts'>
+          <ul>
+            
+          </ul>
+        </div>
+      </div>
+
+      <div id='add-contact-view'> 
+        <form class='underline'>
+          <h2 class='underline'>Create Contact</h2>
+          <fieldset>
+            <dl>
+              <dt><label for='name'>Full name:</label></dt>
+              <dd>
+                <input type='text' name='name' required>
+              </dd>    
+              <dt><label for='email'>Email Address:</label></dt>
+              <dd>
+                <input type='text' name='email' required>
+              </dd>
+              <dt><label>Telephone Number:</label></dt>
+              <dd>
+                <input type='text' name='phone' required>
+              </dd>
+              <input type='submit' id='submit' href='#'>
+              <a id='cancel' href='#'>Cancel</a>
+            </dl>
+          </fieldset>
+        </form>
+      </div>
+
+    </main>
+    <script id='contact-template' type='text/handlebars-template'>
+      <li class='contact underline'>
+        <h3>{{name}}</h3>
+        <dl>
+          <dt>Phone Number:</dt>
+          <dd>{{phone}}</dd>
+          <dt>Email:</dt>
+          <dd>{{email}}</dd>
+        </dl>
+        <a href='#' id='edit'>Edit</a>
+        <a href='#' id='delete'>Delete</a>
+      </li>
+    </script>
+    <script src='./javascripts/app.js'></script>
+  </body>
+</html>

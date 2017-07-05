@@ -1,0 +1,276 @@
+/* http://meyerweb.com/eric/tools/css/reset/ 
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+  display: block;
+}
+body {
+  line-height: 1;
+}
+ol, ul {
+  list-style: none;
+}
+blockquote, q {
+  quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+  content: '';
+  content: none;
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+/*
+=========================================
+Main
+=========================================
+*/
+
+body {
+  font: normal 16px "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+header {
+  padding: 34px 0;
+  text-align: center;
+  background: #398735;
+  font-weight: bold;
+  color: #fff;
+}
+
+header > p {
+  font-weight: normal;
+  font-size: 1.5em;
+}
+
+main {
+  max-width: 1170px;
+  padding: 0 20px 0 20px;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+h1 {
+  font-size: 36px;
+}
+
+#app-functions {
+  width: 100%;
+  background: #F5F5F5;
+  padding: 20px 20px 40px 20px;
+  box-sizing: border-box;
+}
+
+#app-functions:after {
+  content: '';
+  display: table;
+  clear: both;
+}
+
+#add-button,
+#search-bar {
+  text-align: center;
+  width: 49%;
+  display: block;
+  float: left;
+}
+
+#add-button {
+  margin-top: 20px;
+}
+
+#add-button a {
+  font-size: 1.2em;
+  height: 45px;
+  padding: 12px;
+  color: #398735;
+  background: #F5F5F5;
+  border: 1px solid #398735;
+  border-radius: 5px;
+  text-decoration: none;
+  box-sizing: border-box;
+}
+
+#add-button a:hover {
+  color: #fff;
+  background-color: #398735;
+}
+
+#main-view input[type='text'] {
+  height: 34px;
+  width: 266px;
+  font-size: 18px;
+  padding: 6px 12px;
+  border-style: none;
+  border: 2px solid #f0f0f0;
+  border-radius: 3px;
+  box-sizing: border-box;
+}
+
+/*
+=============================
+Contact
+=============================
+*/
+
+#contacts {
+  width: 100%;
+  padding: 40px 0 66px 0;
+}
+
+h3 {
+  font-size: 22px;
+  font-weight: bold;
+  margin: 0 0 28px 0;
+}
+
+ul {
+  width: 100%;
+}
+
+li {
+  display: inline-block;
+  width: 275px;
+  padding: 0 0 30px 0;
+  margin: 0 0 30px 0;
+}
+
+li * {
+  padding: 2px;
+}
+
+li dl {
+  margin: 0 0 22px 0;
+}
+
+li dt {
+  font-weight: bold;
+}
+
+li a {
+  padding: 10px;
+  color: #398735;
+  border: 1px solid #398735;
+  border-radius: 3px;
+  text-decoration: none;
+  background-color: #fff;
+}
+
+
+
+/*
+=============================
+Add New Contact Form
+=============================
+*/
+
+#add-contact-view {
+  display: none;
+}
+
+h2 {
+  margin: 30px 0 0 0;
+  padding: 12px;
+  font-size: 28px;
+  color: #000;
+  text-align: center;
+}
+
+fieldset {
+  border: none;
+  margin-bottom: 54px;
+  padding: 20px 20px 20px 50%;
+}
+
+#add-contact-view dl {
+  margin-left: -352px;
+  font-weight: bold;
+}
+
+#add-contact-view dt {
+  float: left;
+  width: 150px;
+  text-align: right;
+  vertical-align: baseline;
+}
+
+#add-contact-view dd {
+  margin: 0 0 25px 0;
+}
+
+#add-contact-view input[type=text] {
+  position: relative;
+  top: -6px;
+  width: 554px;
+  margin: 0 0 0 30px;
+  height: 30px;
+  border-radius: 5px;
+}
+
+#submit {
+  margin-left: 180px;
+}
+
+#cancel {
+  margin-left: 30px;
+}
+
+#submit,
+#cancel {
+  display: inline-block;
+  text-decoration: none;
+  font-size: 1.2em;
+  color: #398735;
+  border: 1px solid #398735;
+  border-radius: 5px;
+  width: 250px;
+  padding: 12px;
+  text-align: center;
+  font-weight: normal;
+  background-color: #fff;
+}
+
+#submit:hover,
+#cancel:hover, 
+li a:hover {
+  background-color: #398735;
+  color: #fff; 
+}
+
+.underline {
+  border-bottom: 1px solid #f0f0f0;
+}
+
+
+
+
+
+
+
