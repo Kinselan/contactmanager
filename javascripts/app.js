@@ -4,10 +4,10 @@ var $mainView = $('#main-view')
 var $appFunctionBar = $('#app-functions');
 var contactTemplate = Handlebars.compile($('#contact-template').html());
 var formTemplate = Handlebars.compile($('#form-template').html());
+var tagFilterTemplate = Handlebars.compile($('#tag-filter-template').html());
 var $searchBar = $('#search-bar');
 var $tags = $('#tags');
-var TAG_DELIMITER = '%';
-
+var TAG_DELIMITER = ' ';
 
 function revivePrototypeChain(list) {
   list.__proto__ = ContactList.prototype;
@@ -19,23 +19,49 @@ function revivePrototypeChain(list) {
   }
 }
 
-function Contact(id, name, email, phone) {
+function unique(array) {
+  var uniqueArray = [];
+  array.forEach(function(item) {
+    if(uniqueArray.indexOf(item) === -1) {
+      uniqueArray.push(item);
+    }
+  })
+
+  return uniqueArray;
+}
+
+function contactIsMatch(contact, filterMethod, string) {
+  if(filterMethod === 'tagFilter') {
+    return contact.tags.indexOf(string) > -1;
+  }else {
+    return RegExp(string, 'i').test(contact.name);
+  }
+}
+
+function Contact(id) {
   this.id = id;
-  this.name = name;
-  this.email = email;
-  this.phone = phone;
-  this.tags = ''
+  this.name = '';
+  this.email = '';
+  this.phone = '';
+  this.tags = [];
 }
 
-Contact.prototype.addCategoryTag = function(string) {
-  this.tags += (string + TAG_DELIMITER);
-}
+Contact.prototype.addCategoryTags = function(string) {
+  var self = this;
+  string.split(TAG_DELIMITER).forEach(function(tag) { self.tags.push(tag) });
+};
 
-Contact.prototype.edit = function(name, email, phone) {
-  this.name = name;
-  this.email = email;
-  this.phone = phone;
-}
+Contact.prototype.update = function(newInfo) {
+  this.name = newInfo.name;
+  this.email = newInfo.email;
+  this.phone = newInfo.phone;
+  this.addCategoryTags(newInfo.tags);
+};
+
+Contact.prototype.removeTag = function(tag) {
+  var idx = this.tags.indexOf(tag);
+  this.tags.splice(idx, 1);
+};
 
 function ContactList() {
   this.tags = [],
@@ -60,13 +86,13 @@ ContactList.prototype.addContact = function(contact) {
   this.save();
 };
 
-ContactList.prototype.addTag = function(tagName) {
-  this.tags.push(tagName);
-  this.save();
-};
+ContactList.prototype.updateContact = function(serializedArrInfo) {
+  var newInfoObj = {};
+  for(var i = 0; i < serializedArrInfo.length; i += 1) {
+    newInfoObj[serializedArrInfo[i].name] = serializedArrInfo[i].value;
+  }
 
-ContactList.prototype.editContact = function(id, name, email, phone) {
-  this[id].edit(name, email, phone);
+  this[newInfoObj.id].update(newInfoObj);
   this.save();
 };
 
@@ -75,13 +101,47 @@ ContactList.prototype.removeContact = function(id) {
   this.save();
 };
 
-ContactList.prototype.filter = function(regex) {
+ContactList.prototype.removeTagFromContact = function(id, tag) {
+  this[id].removeTag(tag);
+  this.save;
+};
+
+ContactList.prototype.updateCurrentTags = function() {
+  var allTags = [];
+  for(prop in this) {
+    if(this[prop].hasOwnProperty('tags')) {
+      allTags = allTags.concat(this[prop].tags);
+    }
+  }
+
+  this.tags = unique(allTags);
+  this.save();
+}
+
+ContactList.prototype.filter = function(string, filterMethod) {
   var filtered = {};
+  var contact;
   Object.assign(filtered, this);
   
   for(var prop in filtered) {
     if(filtered[prop] instanceof Contact) {
-      if(!regex.test(filtered[prop].name)) {
+      contact = filtered[prop];
+      if(!contactIsMatch(contact, filterMethod, string)) {
+        delete filtered[prop];
+      }
+    }
+  }
+
+  return filtered;
+};
+
+ContactList.prototype.tagFilter = function(tag) {
+  var filtered = {};
+  Object.assign(filtered, this);
+
+  for(var prop in filtered) {
+    if (filtered[prop] instanceof Contact) {
+      if(filtered[prop].tags.indexOf(tag) === -1) {
         delete filtered[prop];
       }
     }
@@ -96,26 +156,32 @@ var contactx = {
     $mainView.slideToggle();
     $formView.slideToggle();
   },
-  addNew: function() {
-    $formView.html(formTemplate({id: contactList.nextId(), submitAction: 'createNewContact', title: 'Create Contact'}));
+  addNewContact: function() {
+    var newContact = new Contact(contactList.nextId());
+    contactList.addContact(newContact);
+    $formView.html(formTemplate({ title: 'Create Contact', contact: newContact, submitAction: 'updateContact', cancelAction: 'cancelNewContact'}));
+    this.toggleViews();
+  },
+  cancelNewContact: function() {
+    var id = $formView.find('input[type="number"]').val();
+    contactList.lastIdAssigned -= 1;
+    contactList.removeContact(id);
     this.toggleViews();
   },
   editContact: function(e) {
     var id = this.getContactId(e);
-    var contact = this.getContact(id);
+    var contact = contactList.getContact(id);
 
-    $formView.html(formTemplate({id: id, submitAction: 'updateContact', title: 'Edit Contact'}))
-    this.populateContactInfo(contact);
+    $formView.html(formTemplate({ title: 'Edit Contact', contact: contact, submitAction: 'updateContact', cancelAction: 'cancelEdit'}))
     this.toggleViews();
   },
-  updateContact: function(e) {
-    var inputValues = $formView.find('form').serializeArray();
-    var id = inputValues[0].value;
-    var name = inputValues[1].value;
-    var email = inputValues[2].value;
-    var phone = inputValues[3].value;
-    
-    contactList.editContact(id, name, email, phone);
+  cancelEdit: function() {
+    this.displayContacts(contactList);
+    this.toggleViews();
+  },
+  updateContact: function() {
+    var newInfoArray = $formView.find('form').serializeArray();
+    contactList.updateContact(newInfoArray);
     this.displayContacts(contactList);
     this.toggleViews();
   },
@@ -131,31 +197,6 @@ var contactx = {
   getContactId: function(e) {
     return $(e.target).closest('li').data('contactid');
   },
-  getContact: function(id) {
-    return contactList.getContact(id);
-  },
-  populateContactInfo: function(contact) {
-    var $fields = $('form input');
-    $fields.eq(0).attr('value', contact.id);
-    $fields.eq(1).attr('value', contact.name);
-    $fields.eq(2).attr('value', contact.email);
-    $fields.eq(3).attr('value', contact.phone);
-  },
-  createNewContact: function() {
-    var newContactInfo = $formView.find('form').serializeArray();
-    var id = newContactInfo[0].value;
-    var name = newContactInfo[1].value;
-    var email = newContactInfo[2].value;
-    var phone = newContactInfo[3].value;
-    var newContact = new Contact(id, name, email, phone);
-    this.saveContact(newContact);
-    this.toggleViews();
-  },
-  saveContact: function(contact) {
-    contactList.addContact(contact);
-    this.displayContacts(contactList);
-    contactList.save();
-  },
   displayContacts: function(list) {
     var html = '';
     for (var prop in list) {
@@ -163,22 +204,28 @@ var contactx = {
         html += contactTemplate(list[prop]);
       }
     }
-
+    this.updateTagFilter();
     $contacts.html(html);
   },
-  displayFilteredContacts: function(pattern) {
-    var regex = RegExp(pattern, 'i');
-    var filtered;
-    filtered = contactList.filter(regex);
+  updateTagFilter: function() {
+    contactList.updateCurrentTags();
+    $appFunctionBar.find('ul').html(tagFilterTemplate({tags: contactList.tags }));
+  },
+  displayFilteredContacts: function(e, pattern) {
+    var filterMethod = e.data ? 'searchFilter' : 'tagFilter';
+    var string = pattern || $(e.target).text();
+    var filtered = contactList.filter(string, filterMethod);
     this.displayContacts(filtered);
   },
-  addTag: function(e) {
-    var $input = $formView.find('aside input').eq(0);
-    var newTag = $input.val();
-    var id = this.getContactId(e);
-    $input.val('');
-    contactList[id].addCategoryTag(newTag);
+  removeTag: function(e) {
+    var $tag = $(e.target).closest('li');
+    var contactId = $('form input[type="number"]').val()
+    $tag.remove();
+    contactList.removeTagFromContact(contactId, $tag.val());
   },
+  resetTagFilter: function() {
+    this.displayContacts(contactList);
+  }
 }
 
 //add event listener to parent container
@@ -189,10 +236,10 @@ $('main').on('click', 'a, input[type=submit]', function(e) {
   contactx[action](e);
 })
 
-$searchBar.on('keyup', 'input', function(e) {
-  var pattern = $searchBar.find('input').eq(0).val();
+$searchBar.on('keyup', 'input', {filterMethod: 'searchFilter'}, function(e) {
+  var pattern = $(e.target).val();
   if(pattern) {
-    contactx.displayFilteredContacts(pattern);
+    contactx.displayFilteredContacts(e, pattern);
   }else {
     contactx.displayContacts(contactList);
   }

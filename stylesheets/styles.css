@@ -95,11 +95,17 @@ h1 {
 }
 
 #add-button,
-#search-bar {
+#search-bar,
+#tag-filter {
+  margin-top: 10px;
   text-align: center;
-  width: 49%;
+  width: 32.5%;
   display: block;
   float: left;
+}
+
+#search-bar {
+  text-align: left;
 }
 
 #add-button {
@@ -134,6 +140,28 @@ h1 {
   box-sizing: border-box;
 }
 
+#resetTagFilter {
+  float: right;
+  text-decoration: none;
+  margin-right: 50%;
+}
+
+#tag-filter {
+  text-align: left;
+}
+
+#tag-filter li,
+#resetTagFilter {
+  display: inline-block;
+  color: #398735;
+  padding: 2px;
+  background-color: #f0f0f0;
+  border: 1px solid #398735;
+  border-radius: 2px;
+}
+
+
+
 /*
 =============================
 Contact
@@ -155,15 +183,12 @@ ul {
   width: 100%;
 }
 
-li {
+#contacts > ul > li {
   display: inline-block;
-  width: 275px;
-  padding: 0 0 30px 0;
+  padding: 30px;
   margin: 0 0 30px 0;
-}
-
-li * {
-  padding: 2px;
+  width: 24.5%;
+  box-sizing: border-box;
 }
 
 li dl {
@@ -174,13 +199,18 @@ li dt {
   font-weight: bold;
 }
 
-li a {
+#contacts li a {
   padding: 10px;
   color: #398735;
   border: 1px solid #398735;
   border-radius: 3px;
   text-decoration: none;
   background-color: #fff;
+}
+
+dd li {
+  display: inline-block;
+  background-color: #f0f0f0;
 }
 
 
@@ -244,8 +274,7 @@ fieldset {
 }
 
 #submit,
-#cancel,
-#tags a {
+#cancel {
   display: inline-block;
   text-decoration: none;
   font-size: 1.2em;
@@ -261,34 +290,19 @@ fieldset {
 }
 
 #submit:hover,
-#cancel:hover, 
-li a:hover,
-#tags a:hover {
+#cancel:hover,
+#contacts ul > li a:hover,
+#tag-filter li:hover,
+#resetTagFilter:hover {
   background-color: #398735;
   color: #fff; 
 }
 
 #tags {
   padding: 25px;
-  width: 150px;
+  width: 80px;
   float: right;
   text-align: center;
-}
-
-#tags a,
-#tags input,
-#tags li {
-  width: 80px;
-  font-size: .75em;
-  margin: auto;
-  display: block;
-  padding: 5px;
-  box-sizing: border-box;
-  border-radius: 3px;
-}
-
-#tags input {
-  margin-bottom: 5px;
 }
 
 #tags ul {
@@ -296,8 +310,38 @@ li a:hover,
 }
 
 #tags li {
+  text-align: center;
+  width: 100%;
+  font-size: .75em;
+  margin: 5px auto;
+  display: block;
+  padding: 5px;
+  box-sizing: border-box;
+  border-radius: 3px;
   background-color: #f0f0f0;
 }
+
+#tags a {
+  text-decoration: none;
+  color: inherit;
+}
+
+#tags h4 {
+  font-size: 1.2em;
+}
+
+#tags p,
+#tag-filter p {
+  margin-bottom: 7px ;
+  font-size: .75em;
+}
+
+span {
+  font-style: italic;
+}
+
+
+
 
 
 

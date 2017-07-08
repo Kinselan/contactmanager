@@ -15,10 +15,16 @@
       <div id='main-view'>
         <div id='app-functions'>
           <div id='add-button'>
-            <a href='#' data-action='addNew'>Add Contact</a>
+            <a href='#' data-action='addNewContact'>Add Contact</a>
           </div>
           <div id='search-bar'>
             <input type=text id='search' placeholder="search">
+          </div>
+          <div id='tag-filter'>
+            <a id='resetTagFilter' data-action='resetTagFilter' href='#'>Reset</a>
+            <h4>Tag Filter:</h4>
+            <p><span>click</span> to show group</p>
+            <ul></ul>
           </div>
         </div>
 
@@ -36,32 +42,46 @@
     <script id='form-template' type='text/handlebars-template'>
       <h2 class='underline'>{{title}}</h2>
       <aside id='tags'>
-        <input type='text' max-length='25'>
-        <a href='#' data-action='addTag'>Add Tag</a>
+        <h4>Tags:</h4>
+        <p><span>click</span> to remove</p>
         <ul>
+          {{#each contact.tags}}
+            <a href='#' data-action="removeTag"><li>{{this}}</li></a>
+          {{/each}}
         </ul>
       </aside>
       <form class='underline'>
         <fieldset>
-          <input value={{id}} type='number' name='id' hidden>
+          <input value='{{contact.id}}' type='number' name='id' hidden>
           <dl>
             <dt><label for='name'>Full name:</label></dt>
             <dd>
-              <input type='text' name='name' required>
+              <input type='text' name='name' value='{{contact.name}}' required>
             </dd>    
             <dt><label for='email'>Email Address:</label></dt>
             <dd>
-              <input type='email' name='email' required>
+              <input type='email' name='email' value='{{contact.email}}' required>
             </dd>
             <dt><label>Telephone Number:</label></dt>
             <dd>
-              <input type='tel' name='phone' required>
+              <input type='tel' name='phone' value='{{contact.phone}}' required>
+            </dd>
+            </dd>
+            <dt><label>Add Tags:</label></dt>
+            <dd>
+              <input type='text' name='tags' placeholder="tag names separated by spaces">
             </dd>
             <input id='submit' type='submit' data-action={{submitAction}} href='#'>
-            <a id='cancel' data-action='cancel' href='#'>Cancel</a>
+            <a id='cancel' data-action={{cancelAction}} href='#'>Cancel</a>
           </dl>
         </fieldset>
       </form>
+    </script>
+
+    <script id='tag-filter-template' type='text/handlebars-template'>
+      {{#each tags}}
+        <a href='#' data-action="displayFilteredContacts"><li>{{this}}</li></a>
+      {{/each}}
     </script>
 
     <script id='contact-template' type='text/handlebars-template'>
@@ -72,6 +92,14 @@
           <dd>{{phone}}</dd>
           <dt>Email:</dt>
           <dd>{{email}}</dd>
+          <dt>Tags:</dt>
+          <dd>
+            <ul>
+              {{#each tags}}
+                <li>{{this}}</li>
+              {{/each}}
+            </ul>
+          </dd>
         </dl>
         <a href='#' data-action='editContact'>Edit</a>
         <a href='#' data-action='deleteContact'>Delete</a>
