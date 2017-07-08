@@ -187,11 +187,11 @@ li a {
 
 /*
 =============================
-Add New Contact Form
+Form
 =============================
 */
 
-#add-contact-view {
+#form-view {
   display: none;
 }
 
@@ -206,26 +206,27 @@ h2 {
 fieldset {
   border: none;
   margin-bottom: 54px;
-  padding: 20px 20px 20px 50%;
+  padding: 20px;
 }
 
-#add-contact-view dl {
-  margin-left: -352px;
+#form-view dl {
   font-weight: bold;
 }
 
-#add-contact-view dt {
+#form-view dt {
   float: left;
   width: 150px;
   text-align: right;
   vertical-align: baseline;
 }
 
-#add-contact-view dd {
+#form-view dd {
   margin: 0 0 25px 0;
 }
 
-#add-contact-view input[type=text] {
+#form-view form input[type=text],
+#form-view input[type=email], 
+#form-view input[type=tel] {
   position: relative;
   top: -6px;
   width: 554px;
@@ -243,7 +244,8 @@ fieldset {
 }
 
 #submit,
-#cancel {
+#cancel,
+#tags a {
   display: inline-block;
   text-decoration: none;
   font-size: 1.2em;
@@ -255,22 +257,54 @@ fieldset {
   text-align: center;
   font-weight: normal;
   background-color: #fff;
+  box-sizing: border-box;
 }
 
 #submit:hover,
 #cancel:hover, 
-li a:hover {
+li a:hover,
+#tags a:hover {
   background-color: #398735;
   color: #fff; 
 }
 
-.underline {
-  border-bottom: 1px solid #f0f0f0;
+#tags {
+  padding: 25px;
+  width: 150px;
+  float: right;
+  text-align: center;
+}
+
+#tags a,
+#tags input,
+#tags li {
+  width: 80px;
+  font-size: .75em;
+  margin: auto;
+  display: block;
+  padding: 5px;
+  box-sizing: border-box;
+  border-radius: 3px;
+}
+
+#tags input {
+  margin-bottom: 5px;
+}
+
+#tags ul {
+  margin-top: 25px;
+}
+
+#tags li {
+  background-color: #f0f0f0;
 }
 
 
 
 
+.underline {
+  border-bottom: 1px solid #f0f0f0;
+}
 
 
 

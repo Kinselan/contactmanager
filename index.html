@@ -15,7 +15,7 @@
       <div id='main-view'>
         <div id='app-functions'>
           <div id='add-button'>
-            <a href='#' id='addNew'>Add Contact</a>
+            <a href='#' data-action='addNew'>Add Contact</a>
           </div>
           <div id='search-bar'>
             <input type=text id='search' placeholder="search">
@@ -24,38 +24,48 @@
 
         <div id='contacts'>
           <ul>
-            
-          </ul>
+          </ul>          
         </div>
       </div>
 
-      <div id='add-contact-view'> 
-        <form class='underline'>
-          <h2 class='underline'>Create Contact</h2>
-          <fieldset>
-            <dl>
-              <dt><label for='name'>Full name:</label></dt>
-              <dd>
-                <input type='text' name='name' required>
-              </dd>    
-              <dt><label for='email'>Email Address:</label></dt>
-              <dd>
-                <input type='text' name='email' required>
-              </dd>
-              <dt><label>Telephone Number:</label></dt>
-              <dd>
-                <input type='text' name='phone' required>
-              </dd>
-              <input type='submit' id='submit' href='#'>
-              <a id='cancel' href='#'>Cancel</a>
-            </dl>
-          </fieldset>
-        </form>
+      <div id='form-view'> 
       </div>
 
     </main>
+
+    <script id='form-template' type='text/handlebars-template'>
+      <h2 class='underline'>{{title}}</h2>
+      <aside id='tags'>
+        <input type='text' max-length='25'>
+        <a href='#' data-action='addTag'>Add Tag</a>
+        <ul>
+        </ul>
+      </aside>
+      <form class='underline'>
+        <fieldset>
+          <input value={{id}} type='number' name='id' hidden>
+          <dl>
+            <dt><label for='name'>Full name:</label></dt>
+            <dd>
+              <input type='text' name='name' required>
+            </dd>    
+            <dt><label for='email'>Email Address:</label></dt>
+            <dd>
+              <input type='email' name='email' required>
+            </dd>
+            <dt><label>Telephone Number:</label></dt>
+            <dd>
+              <input type='tel' name='phone' required>
+            </dd>
+            <input id='submit' type='submit' data-action={{submitAction}} href='#'>
+            <a id='cancel' data-action='cancel' href='#'>Cancel</a>
+          </dl>
+        </fieldset>
+      </form>
+    </script>
+
     <script id='contact-template' type='text/handlebars-template'>
-      <li class='contact underline'>
+      <li class='contact underline' data-contactid='{{id}}'>
         <h3>{{name}}</h3>
         <dl>
           <dt>Phone Number:</dt>
@@ -63,10 +73,11 @@
           <dt>Email:</dt>
           <dd>{{email}}</dd>
         </dl>
-        <a href='#' id='edit'>Edit</a>
-        <a href='#' id='delete'>Delete</a>
+        <a href='#' data-action='editContact'>Edit</a>
+        <a href='#' data-action='deleteContact'>Delete</a>
       </li>
     </script>
+
     <script src='./javascripts/app.js'></script>
   </body>
 </html>
