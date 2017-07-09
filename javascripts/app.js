@@ -110,7 +110,7 @@ ContactList.prototype.removeContact = function(id) {
 
 ContactList.prototype.removeTagFromContact = function(id, tag) {
   this[id].removeTag(tag);
-  this.save;
+  this.save();
 };
 
 ContactList.prototype.updateCurrentTags = function() {
