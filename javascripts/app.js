@@ -2,13 +2,17 @@ var $contacts = $('#contacts ul');
 var $formView = $('#form-view');
 var $mainView = $('#main-view')
 var $appFunctionBar = $('#app-functions');
+var $searchBar = $('#search-bar');
+var $tags = $('#tags');
+
+//templates
 var contactTemplate = Handlebars.compile($('#contact-template').html());
 var formTemplate = Handlebars.compile($('#form-template').html());
 var tagFilterTemplate = Handlebars.compile($('#tag-filter-template').html());
-var $searchBar = $('#search-bar');
-var $tags = $('#tags');
+
 var TAG_DELIMITER = ' ';
 
+//helpers
 function revivePrototypeChain(list) {
   list.__proto__ = ContactList.prototype;
 
@@ -38,6 +42,7 @@ function contactIsMatch(contact, filterMethod, string) {
   }
 }
 
+//Contact
 function Contact(id) {
   this.id = id;
   this.name = '';
@@ -48,6 +53,7 @@ function Contact(id) {
 
 Contact.prototype.addCategoryTags = function(string) {
   var self = this;
+  if(!string) {return;}
   string.split(TAG_DELIMITER).forEach(function(tag) { self.tags.push(tag) });
 };
 
@@ -63,6 +69,7 @@ Contact.prototype.removeTag = function(tag) {
   this.tags.splice(idx, 1);
 };
 
+//Contact List
 function ContactList() {
   this.tags = [],
   this.lastIdAssigned = 0;
@@ -151,6 +158,8 @@ ContactList.prototype.tagFilter = function(tag) {
 }
 
 
+
+//Main app
 var contactx = {
   toggleViews: function() {
     $mainView.slideToggle();
@@ -221,14 +230,14 @@ var contactx = {
     var $tag = $(e.target).closest('li');
     var contactId = $('form input[type="number"]').val()
     $tag.remove();
-    contactList.removeTagFromContact(contactId, $tag.val());
+    contactList.removeTagFromContact(contactId, $tag.text());
   },
   resetTagFilter: function() {
     this.displayContacts(contactList);
   }
 }
 
-//add event listener to parent container
+//add event listeners
 $('main').on('click', 'a, input[type=submit]', function(e) {
   e.stopPropagation();
   e.preventDefault();
