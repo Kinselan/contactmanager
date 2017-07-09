@@ -142,23 +142,6 @@ ContactList.prototype.filter = function(string, filterMethod) {
   return filtered;
 };
 
-ContactList.prototype.tagFilter = function(tag) {
-  var filtered = {};
-  Object.assign(filtered, this);
-
-  for(var prop in filtered) {
-    if (filtered[prop] instanceof Contact) {
-      if(filtered[prop].tags.indexOf(tag) === -1) {
-        delete filtered[prop];
-      }
-    }
-  }
-
-  return filtered;
-}
-
-
-
 //Main app
 var contactx = {
   toggleViews: function() {
