@@ -20,11 +20,11 @@ $("[id*='template']").each(function(idx, template) {
 function revivePrototypeChain(list) {
   list.__proto__ = ContactList.prototype;
 
-  for(var prop in list) {
-    if(list[prop].hasOwnProperty('email')) {
-      list[prop].__proto__ = Contact.prototype;
+  $.each(list, function(prop, val){
+    if(val.hasOwnProperty('email')) {
+      val.__proto__ = Contact.prototype;
     }
-  }
+  });
 }
 
 function unique(array) {
@@ -119,11 +119,11 @@ ContactList.prototype.removeTagFromContact = function(id, tag) {
 
 ContactList.prototype.updateCurrentTags = function() {
   var allTags = [];
-  for(prop in this) {
-    if(this[prop].hasOwnProperty('tags')) {
-      allTags = allTags.concat(this[prop].tags);
+  $.each(this, function(prop, val) {
+    if(val.hasOwnProperty('tags')) {
+      allTags = allTags.concat(val.tags);
     }
-  }
+  });
 
   this.tags = unique(allTags);
   this.save();
@@ -134,14 +134,14 @@ ContactList.prototype.filter = function(string, filterMethod) {
   var contact;
   Object.assign(filtered, this);
   
-  for(var prop in filtered) {
-    if(filtered[prop] instanceof Contact) {
-      contact = filtered[prop];
+  $.each(filtered, function(prop, val) {
+    if(val instanceof Contact) {
+      contact = val;
       if(!contactIsMatch(contact, filterMethod, string)) {
         delete filtered[prop];
       }
     }
-  }
+  })
 
   return filtered;
 };
@@ -195,11 +195,12 @@ var contactx = {
   },
   displayContacts: function(list) {
     var html = '';
-    for (var prop in list) {
-      if(list[prop] instanceof Contact) {
-        html += templates['contact-template'](list[prop]);
+    $.each(list, function(prop, val) {
+      if(val instanceof Contact) {
+        html += templates['contact-template'](val);
       }
-    }
+    })
+
     this.updateTagFilter();
     $contacts.html(html);
   },
