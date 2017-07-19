@@ -58,7 +58,7 @@ function Contact(id) {
 Contact.prototype.addCategoryTags = function(string) {
   var self = this;
   if(!string) {return;}
-  string.split(TAG_DELIMITER).forEach(function(tag) { self.tags.push(tag) });
+  string.split(TAG_DELIMITER).forEach(function(tag) { self.tags.push(tag.toLowerCase()) });
 };
 
 Contact.prototype.update = function(newInfo) {
@@ -160,7 +160,6 @@ var contactx = {
   },
   cancelNewContact: function() {
     var id = $formView.find('input[type="number"]').val();
-    contactList.lastIdAssigned -= 1;
     contactList.removeContact(id);
     this.toggleViews();
   },
