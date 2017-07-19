@@ -99,9 +99,9 @@ ContactList.prototype.addContact = function(contact) {
 
 ContactList.prototype.updateContact = function(serializedArrInfo) {
   var newInfoObj = {};
-  for(var i = 0; i < serializedArrInfo.length; i += 1) {
-    newInfoObj[serializedArrInfo[i].name] = serializedArrInfo[i].value;
-  }
+  $.each(serializedArrInfo, function(idx, infoObj){
+    newInfoObj[infoObj.name] = infoObj.value;
+  })
 
   this[newInfoObj.id].update(newInfoObj);
   this.save();
