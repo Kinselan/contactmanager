@@ -4,13 +4,17 @@ var $mainView = $('#main-view')
 var $appFunctionBar = $('#app-functions');
 var $searchBar = $('#search-bar');
 var $tags = $('#tags');
-
-//templates
-var contactTemplate = Handlebars.compile($('#contact-template').html());
-var formTemplate = Handlebars.compile($('#form-template').html());
-var tagFilterTemplate = Handlebars.compile($('#tag-filter-template').html());
-
 var TAG_DELIMITER = ' ';
+
+
+//cache templates in object;
+var templates = {};
+
+$("[id*='template']").each(function(idx, template) {
+  $template = $(template);
+  templates[$template.attr('id')] = Handlebars.compile($template.html());
+});
+
 
 //helpers
 function revivePrototypeChain(list) {
@@ -151,7 +155,7 @@ var contactx = {
   addNewContact: function() {
     var newContact = new Contact(contactList.nextId());
     contactList.addContact(newContact);
-    $formView.html(formTemplate({ title: 'Create Contact', contact: newContact, submitAction: 'updateContact', cancelAction: 'cancelNewContact'}));
+    $formView.html(templates['form-template']({ title: 'Create Contact', contact: newContact, submitAction: 'updateContact', cancelAction: 'cancelNewContact'}));
     this.toggleViews();
   },
   cancelNewContact: function() {
@@ -164,7 +168,7 @@ var contactx = {
     var id = this.getContactId(e);
     var contact = contactList.getContact(id);
 
-    $formView.html(formTemplate({ title: 'Edit Contact', contact: contact, submitAction: 'updateContact', cancelAction: 'cancelEdit'}))
+    $formView.html(templates['form-template']({ title: 'Edit Contact', contact: contact, submitAction: 'updateContact', cancelAction: 'cancelEdit'}))
     this.toggleViews();
   },
   cancelEdit: function() {
@@ -193,7 +197,7 @@ var contactx = {
     var html = '';
     for (var prop in list) {
       if(list[prop] instanceof Contact) {
-        html += contactTemplate(list[prop]);
+        html += templates['contact-template'](list[prop]);
       }
     }
     this.updateTagFilter();
@@ -201,7 +205,7 @@ var contactx = {
   },
   updateTagFilter: function() {
     contactList.updateCurrentTags();
-    $appFunctionBar.find('ul').html(tagFilterTemplate({tags: contactList.tags }));
+    $appFunctionBar.find('ul').html(templates['tag-filter-template']({tags: contactList.tags }));
   },
   displayFilteredContacts: function(e, pattern) {
     var filterMethod = e.data ? 'searchFilter' : 'tagFilter';
