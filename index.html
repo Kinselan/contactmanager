@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en-US">
+	<head>
+		<title>Contact Manager</title>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700&amp;lang=en" rel="stylesheet">
+		<link rel="stylesheet" href="style.css" />
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.10/handlebars.js"></script>
+		<script id="contactsTemplate" type='text/x-handlebars'>
+			{{#each contacts}}
+				<div class="contact" data-id="{{id}}">
+					<h3>{{name}}</h3>
+					<dl>
+						<dt>Phone</dt>
+						<dd>{{phone}}</dd>
+						<dt>Email</dt>
+						<dd>{{email}}</dd>
+						<dt>Tags</dt>
+						<dd class="tags">
+							{{> tagsTemplate}}
+						</dd>
+					</dl>
+					<button class="edit">Edit</button>
+					<button class="delete">Delete</button>
+				</div>
+			{{/each}}
+		</script>
+		<script id="tagsTemplate" type='text/x-handlebars'>
+			{{#each tags}}
+			<a class="tag">{{this}}</a>
+			{{/each}}
+		</script>
+		<script src="js.js"></script>
+	</head>
+	<body>
+		<header>
+			<div class="normalWidth">
+				<h1>Contact Manager</h1>
+				<h2>Using localStorage, jQuery, Handlebars</h2>
+				<input type="text" id="search" placeholder="filter contacts"/>
+			</div>
+		</header>
+		<div class="addNew">
+			<div class="normalWidth">
+				<button id="newContact">+ Add New Contact</button>
+			</div>
+		</div>
+		<div class="normalWidth">
+			<div id="contacts">
+				<!-- Contacts Added Here with Handlebars & jQuery -->
+			</div>
+		</div>
+		<div id="addNewForm">
+			<div class="normalWidth">
+				<h3>Create Contact</h3>
+				<form method="post">
+					<fieldset>
+						<input type='text' placeholder="Full Name" id="formFullName"/>
+						<input type='email' placeholder="Email" id="formEmail"/>
+						<input type="tel" placeholder="Telephone"  id="formTel"/>
+						<input type="tags" placeholder="Tags, separated by space" id="formTags"/>
+						<button class="big" id="add">Add</button>
+						<button class="big cancel" id="cancel">Cancel</button>
+					</fieldset>
+				</form>
+			</div>
+		</div>
+		<div id="editForm">
+			<div class="normalWidth">
+				<h3>Edit a Contact</h3>
+				<form method="post">
+					<fieldset>
+						<input type='text' placeholder="Full Name" id="editFormFullName"/>
+						<input type='email' placeholder="Email" id="editFormEmail"/>
+						<input type="tel" placeholder="Telephone"  id="editFormTel"/>
+						<input type="tags" placeholder="Tags, separated by space" id="editFormTags"/>
+						<button class="big" id="saveChanges">Save Changes</button>
+						<button class="big cancel" id="cancelEdit">Cancel</button>
+					</fieldset>
+				</form>
+			</div>
+		</div>
+	</body>
+</html>
